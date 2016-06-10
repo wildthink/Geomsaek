@@ -5,7 +5,8 @@
 //  Copyright © 2015 Nate Cook. All rights reserved.
 //
 
-#import <Cocoa/Cocoa.h>
+//#import <Cocoa/Cocoa.h>
+#import <Foundation/Foundation.h>
 
 //! Project version number for Geomsaek.
 FOUNDATION_EXPORT double GeomsaekVersionNumber;

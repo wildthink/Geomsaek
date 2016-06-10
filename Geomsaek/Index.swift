@@ -54,7 +54,7 @@ public class Index {
         SKIndexFlush(_index)
     }
     
-    internal func documentsWithIDs(var documentIDs: [DocumentID]) -> [Document?] {
+    internal func documentsWithIDs(inout documentIDs: [DocumentID]) -> [Document?] {
         var unmanagedDocuments: [Unmanaged<SKDocumentRef>?] = Array(count: documentIDs.count, repeatedValue: nil)
         
         SKIndexCopyDocumentRefsForDocumentIDs(_index, documentIDs.count, &documentIDs, &unmanagedDocuments)
@@ -64,7 +64,7 @@ public class Index {
         })
     }
     
-    internal func urlsWithIDs(var documentIDs: [DocumentID]) -> [NSURL?] {
+    internal func urlsWithIDs(inout documentIDs: [DocumentID]) -> [NSURL?] {
         // unmanagedURLs will get populated with CFURL objects from the array of document IDs
         var unmanagedURLs: [Unmanaged<CFURL>?] = Array(count: documentIDs.count, repeatedValue: nil)
         SKIndexCopyDocumentURLsForDocumentIDs(_index, documentIDs.count, &documentIDs, &unmanagedURLs)

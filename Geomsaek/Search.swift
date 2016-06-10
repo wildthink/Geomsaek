@@ -68,7 +68,8 @@ public class Searcher {
     public func startSearch(terms: String, progressHandler: SearchResultsHandler? = nil, completionHandler: SearchResultsHandler?) -> SearchID {
         // create a search and a new unique search ID
         let search = SKSearchCreate(_index._index, terms, _options).takeRetainedValue()
-        let searchID = _nextSearchID++
+        _nextSearchID += 1
+        let searchID = _nextSearchID
 
         // create a search operation to run the search on the `searchQueue` operations queue
         let searchOperation = _SearchOperation(search: search)
@@ -113,13 +114,13 @@ public class Searcher {
 
 public class SearchResults {
     internal let _index: Index
-    public let documentIDs: [DocumentID]
+    public var documentIDs: [DocumentID]
     public let scores: [Float]
     
     internal var _documents: [Document]?
     public var documents: [Document] {
         if _documents == nil {
-            _documents = _index.documentsWithIDs(documentIDs).flatMap({ $0 })
+            _documents = _index.documentsWithIDs(&documentIDs).flatMap({ $0 })
         }
         return _documents!
     }
@@ -127,7 +128,7 @@ public class SearchResults {
     internal var _urls: [NSURL]?
     public var urls: [NSURL] {
         if _urls == nil {
-            _urls = _index.urlsWithIDs(documentIDs).flatMap({ $0 })
+            _urls = _index.urlsWithIDs(&documentIDs).flatMap({ $0 })
         }
         return _urls!
     }

@@ -38,7 +38,6 @@
 		432DD69C1C0D6E9D00F4EA1F /* 38.txt in Resources */ = {isa = PBXBuildFile; fileRef = 432DD67E1C0D6E9D00F4EA1F /* 38.txt */; };
 		432DD69D1C0D6E9D00F4EA1F /* 39.txt in Resources */ = {isa = PBXBuildFile; fileRef = 432DD67F1C0D6E9D00F4EA1F /* 39.txt */; };
 		432DD69F1C0D783D00F4EA1F /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 432DD69E1C0D783D00F4EA1F /* LICENSE */; };
-		432DD6A11C0D789200F4EA1F /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 432DD6A01C0D789200F4EA1F /* README.md */; };
 		FE389A6D1C04F56900416A50 /* Geomsaek.h in Headers */ = {isa = PBXBuildFile; fileRef = FE389A6C1C04F56900416A50 /* Geomsaek.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		FE389A741C04F56900416A50 /* Geomsaek.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FE389A691C04F56900416A50 /* Geomsaek.framework */; };
 		FE389A791C04F56900416A50 /* GeomsaekTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE389A781C04F56900416A50 /* GeomsaekTests.swift */; };
@@ -340,7 +339,6 @@
 			files = (
 				FE389A881C04F59700416A50 /* Search.swift in Sources */,
 				FE389A861C04F59000416A50 /* Document.swift in Sources */,
-				432DD6A11C0D789200F4EA1F /* README.md in Sources */,
 				FE389A841C04F57C00416A50 /* Index.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
