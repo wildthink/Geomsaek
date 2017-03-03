@@ -10,17 +10,17 @@ import Foundation
 public typealias DocumentID = SKDocumentID
 
 public struct Document {
-    internal let _doc: SKDocumentRef
+    internal let _doc: SKDocument
 
-    public var url: NSURL {
-        return SKDocumentCopyURL(_doc).takeRetainedValue() as NSURL
+    public var url: URL {
+        return SKDocumentCopyURL(_doc).takeRetainedValue() as URL
     }
 
-    public init(url: NSURL) {
+    public init(url: URL) {
         self._doc = SKDocumentCreateWithURL(url as CFURL).takeRetainedValue()
     }
     
-    internal init(_skdoc: SKDocumentRef) {
+    internal init(_skdoc: SKDocument) {
         self._doc = _skdoc
     }
 }

@@ -8,16 +8,16 @@
 import Foundation
 
 public enum SearchOptions: UInt32 {
-   case Default             = 0b000
-   case NoRelevanceScores   = 0b001
-   case SpaceMeansOR        = 0b010
-   case FindSimilar         = 0b100
+   case `default`             = 0b000
+   case noRelevanceScores   = 0b001
+   case spaceMeansOR        = 0b010
+   case findSimilar         = 0b100
 }
 
-private let _searchQueue = NSOperationQueue()
+private let _searchQueue = OperationQueue()
 
-private class _SearchOperation: NSOperation {
-    let search: SKSearchRef
+private class _SearchOperation: Operation {
+    let search: SKSearch
     var results: [DocumentID] = []
     var resultScores: [Float] = []
     var shouldCancel = false
@@ -31,43 +31,43 @@ private class _SearchOperation: NSOperation {
         
         while moreResults && !shouldCancel {
             var found: CFIndex = 0
-            var documentIDs: [SKDocumentID] = Array(count: limit, repeatedValue: 0)
-            var scores: [Float] = Array(count: limit, repeatedValue: 0)
+            var documentIDs: [SKDocumentID] = Array(repeating: 0, count: limit)
+            var scores: [Float] = Array(repeating: 0, count: limit)
             
             moreResults = SKSearchFindMatches(search, limit, &documentIDs, &scores, 1000, &found)
             
             // append only the found results
-            results.appendContentsOf(documentIDs[0 ..< found])
-            resultScores.appendContentsOf(scores[0 ..< found])
+            results.append(contentsOf: documentIDs[0 ..< found])
+            resultScores.append(contentsOf: scores[0 ..< found])
             
             // call progress block
             progressBlock?(results, resultScores)
         }
     }
     
-    init(search: SKSearchRef) {
+    init(search: SKSearch) {
         self.search = search
     }
 }
 
-public class Searcher {
+open class Searcher {
     public typealias SearchID = Int
     public typealias SearchResultsHandler = (SearchResults) -> Void
 
-    private let _index: Index
-    private let _options: SKSearchOptions
+    fileprivate let _index: Index
+    fileprivate let _options: SKSearchOptions
 
-    private var _nextSearchID = 0
-    private var _searches: [SearchID: _SearchOperation] = [:]
+    fileprivate var _nextSearchID = 0
+    fileprivate var _searches: [SearchID: _SearchOperation] = [:]
     
-    public init(inIndex index: Index, options: SearchOptions = .Default) {
+    public init(inIndex index: Index, options: SearchOptions = .default) {
         self._index = index
         self._options = options.rawValue
     }
     
-    public func startSearch(terms: String, progressHandler: SearchResultsHandler? = nil, completionHandler: SearchResultsHandler?) -> SearchID {
+    open func startSearch(_ terms: String, progressHandler: SearchResultsHandler? = nil, completionHandler: SearchResultsHandler?) -> SearchID {
         // create a search and a new unique search ID
-        let search = SKSearchCreate(_index._index, terms, _options).takeRetainedValue()
+        let search = SKSearchCreate(_index._index, terms as CFString!, _options).takeRetainedValue()
         _nextSearchID += 1
         let searchID = _nextSearchID
 
@@ -100,33 +100,33 @@ public class Searcher {
         return searchID
     }
     
-    public func cancelSearch(searchID: SearchID) {
+    open func cancelSearch(_ searchID: SearchID) {
         if let operation = _searches[searchID] {
             operation.shouldCancel = true
             SKSearchCancel(operation.search)
         }
     }
     
-    public func cancelAllSearches() {
+    open func cancelAllSearches() {
         _searches.keys.forEach(cancelSearch)
     }
 }
 
-public class SearchResults {
+open class SearchResults {
     internal let _index: Index
-    public var documentIDs: [DocumentID]
-    public let scores: [Float]
+    open var documentIDs: [DocumentID]
+    open let scores: [Float]
     
     internal var _documents: [Document]?
-    public var documents: [Document] {
+    open var documents: [Document] {
         if _documents == nil {
             _documents = _index.documentsWithIDs(&documentIDs).flatMap({ $0 })
         }
         return _documents!
     }
     
-    internal var _urls: [NSURL]?
-    public var urls: [NSURL] {
+    internal var _urls: [URL]?
+    open var urls: [URL] {
         if _urls == nil {
             _urls = _index.urlsWithIDs(&documentIDs).flatMap({ $0 })
         }
